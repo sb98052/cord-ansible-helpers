@@ -1,0 +1,30 @@
+---
+- hosts: all
+  user: sb98052
+
+  tasks:
+  - name: Install screen
+    apt: name={{ item }} update_cache=yes state=present
+    become: yes
+    with_items:
+        - screen
+        - vim
+
+  - name: Download ciab
+    get_url: 
+        url: https://raw.githubusercontent.com/opencord/cord/master/scripts/cord-in-a-box.sh
+        dest: ~/cord-in-a-box.sh
+        mode: 0755
+
+  - name: Run ciab
+    command: screen -dmS test bash -c 'echo waiting 5 senconds...; sleep 5; ~/cord-in-a-box.sh -t | tee install.out'
+    args:
+        chdir: ~
+
+
+
+
+
+
+
+
